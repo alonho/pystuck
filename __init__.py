@@ -21,9 +21,11 @@ def main():
     parser = argparse.ArgumentParser(description='pyrobe.py is a debug utility for probing and investigating running python programs, it requires the debuggee to run an integrated server by importing pyrobe and calling pyrobe.runserver()')
     parser.add_argument('host', nargs='?', default=DEFAULT_HOST, help='server address (default: {})'.format(DEFAULT_HOST))
     parser.add_argument('port', nargs='?', default=DEFAULT_PORT, help='server port (default: {})'.format(DEFAULT_PORT))
+    parser.add_argument('--no-stacks', action='store_false', dest='stacks', help="don't print the debugee's threads and stacks")
+    parser.add_argument('--no-ipython', action='store_false', dest='ipython', help="don't open an ipython prompt for debugging")
     args = parser.parse_args()
 
-    run_client(host=args.host, port=args.port)
+    run_client(host=args.host, port=args.port, print_stacks=args.stacks, ipython=args.ipython)
 
 if __name__ == '__main__':
     main()

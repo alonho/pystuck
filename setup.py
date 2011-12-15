@@ -1,8 +1,18 @@
 from setuptools import setup
-from pystuck import README
+
+README = """
+pystuck.py is a utility for analyzing stuck python programs (or just hardcore debugging).
+
+in order to debug a python program (hence, the debugee),
+add this line anywhere at startup: import pystuck; pystuck.run_server().
+
+this script is the client, once invoked it connects to the debuggee
+and prints the debugee's threads stack traces (good for most cases).
+in addition, it opens an ipython prompt with an rpyc connection that provides
+access to the debuggee's modules (good for inspecting variables)."""
 
 setup(name='pystuck',
-      version='0.1',
+      version='0.2',
       classifiers = ["Development Status :: 4 - Beta",
                      "Intended Audience :: Developers",
                      "License :: OSI Approved :: BSD License",

@@ -40,16 +40,16 @@ running pystuck from the shell shows interesting stuff:
 
     ...
 
-its stuck waiting for the lock!.
+it's stuck waiting for the lock!.
 it actually prints two more threads that are related to pystuck, ignore them.
 
-whose got the lock?!
+who's got the lock?!
 ====================
 
 ::
 
-    # it seldom happens that a thread doesn't release the lock or stuck while holding it.
-    # we want to know which thread... bare with me now.
+    # it seldom happens that a thread doesn't release the lock or is stuck while holding it.
+    # we want to know which thread... bear with me now.
     rlock.acquire() 
 
 invoking pystuck again:

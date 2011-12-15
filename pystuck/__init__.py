@@ -5,7 +5,7 @@ README = """
 pystuck.py is a utility for analyzing stuck python programs (or just hardcore debugging).
 
 in order to debug a python program (hence, the debugee),
-add this line anywhere at startup: import pystuck; pystuck.runserver().
+add this line anywhere at startup: import pystuck; pystuck.run_server().
 
 this script is the client, once invoked it connects to the debuggee
 and prints the debugee's threads stack traces (good for most cases).

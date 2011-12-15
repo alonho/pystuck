@@ -4,6 +4,14 @@ pystuck
 
 pystuck.py is a utility for analyzing stuck python programs (or just hardcore debugging).
 
+=======
+install
+=======
+
+::
+
+    pip install pystuck
+
 ========
 Examples
 ========
@@ -14,6 +22,7 @@ what is python doing?!
 test.py is stuck, wouldn't you just die to know where?
 
 ::
+
     import pystuck; pystuck.run_server().
 
     while True:
@@ -29,14 +38,18 @@ running pystuck from the shell shows interesting stuff:
       File "test.py", line 9, in <module>
         with lock: # could block
 
+    ...
+
+its stuck waiting for the lock!.
 it actually prints two more threads that are related to pystuck, ignore them.
 
 whose got the lock?!
 ====================
 
 ::
+
     # it seldom happens that a thread doesn't release the lock or stuck while holding it.
-    # we want to know which thread... RLock._RLock__owner will reveal it, bare with me now.
+    # we want to know which thread... bare with me now.
     rlock.acquire() 
 
 invoking pystuck again:
@@ -58,6 +71,8 @@ invoking pystuck again:
       File "test.py", line 20, in foo
         do_network()
 
+    use the 'modules' dictionary to access remote modules (like 'os', or '__main__')
+
     In [0]: modules['sys']._current_frames() # gets a mapping between a thread to its frame (top of stack)
     Out[0]: {-1215396160: <frame object at 0x8a07154>, 
              -1219450000: <frame object at 0x8a29154>,
@@ -66,14 +81,37 @@ invoking pystuck again:
     In [1]: _[-1215396160] # get the stuck thread's frame
     Out[1]: <frame object at 0x8a07154> 
     
-    In [2]: _.f_locals
-    Out[2]: {'lock': <_RLock owner=-1219540000 count=1>}
+    In [2]: _.f_locals # local variables of the function
+    Out[2]: {'lock': <_RLock owner=-1219450000 count=1>}
 
     In [3]: # our stuck thread is probably waiting for thread 1219450000 to finish do_math.. figures
 
+what rpyc can do for you
+========================
+
+rpyc is the library used to communicate python objects and procedure calls across processes.
+here are some of the things you can do to the already running server.
+
+::
+    
+    % pyrobe
+    
+    (stacks appear here...)
+ 
+    In [1]: modules['sys'].stdout = file("/tmp/log.txt", "w") # tunnel the script's stdout to log
+    
+    In [2]: modules['__main__'].global_var = 100 # change and inspect variables in the __main__ module (the name of the script when invoked like this: python script.py)
+
+    In [3]: socket = modules['socket'].socket() # create a socket object opened by the server script!
+ 
 =====
 usage
 =====
+
+in the debugged script: import pystuck; pystuck.run_server()
+to invoke the client: invoke pystuck from the shell.
+
+for advanced usage, look at the options:
 
 :: 
 

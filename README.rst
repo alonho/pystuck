@@ -4,6 +4,22 @@ pystuck
 
 pystuck.py is a utility for analyzing stuck python programs (or just hardcore debugging).
 
+pystuck currently has two major features:
+1. print all running threads' stack traces.
+2. remote inspection of modules and variables without interrupting the program.
+
+in the debugged script: import pystuck; pystuck.run_server()
+to invoke the client: invoke pystuck from the shell.
+
+production use
+==============
+
+pystuck doesn't consume resources when no client is connected to it. all the run_server function does is spawn a thread that blocks on accept (waiting for clients to connect), so it can be used in production.
+
+there are two drawbacks for using pystuck in production:
+1. meddling with variables and modules is not thread safe.
+2. a potential security breach - nothing prevents an unprivilidged user connect to a privlidged running python process and use the remote access to do practically anything.
+
 =======
 install
 =======
@@ -107,11 +123,6 @@ here are some of the things you can do to the already running server.
 =====
 usage
 =====
-
-in the debugged script: import pystuck; pystuck.run_server()
-to invoke the client: invoke pystuck from the shell.
-
-for advanced usage, look at the options:
 
 :: 
 

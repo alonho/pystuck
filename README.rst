@@ -116,7 +116,7 @@ here are some of the things you can do to the already running server.
 
 ::
     
-    % pyrobe
+    % pystuck
     
     (stacks appear here...)
  

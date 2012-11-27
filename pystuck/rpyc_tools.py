@@ -1,21 +1,21 @@
-from rpyc.utils.classic import connect as rpyc_connect
 from rpyc.utils.server import ThreadedServer
 from rpyc.core import SlaveService
 import threading
+import os
 
 DEFAULT_PORT = 6666
-#DEFAULT_PORT = os.getpid() # multiple processes can co-exist
-DEFAULT_HOST = "127.0.0.1" 
-#DEFAULT_HOST = "0.0.0.0" # reachable from outside the machine (security hole!)
+DEFAULT_HOST = "127.0.0.1"
 
-def run_server(host=DEFAULT_HOST, port=DEFAULT_PORT):
+def run_server(host=DEFAULT_HOST, port=DEFAULT_PORT, unix_socket=None):
+    args = dict(hostname=host, port=port) if unix_socket is None else dict(socket_path=unix_socket)
+    if unix_socket is not None:
+        try:
+            os.unlink(unix_socket)
+        except OSError:
+            pass
     server = ThreadedServer(service=SlaveService,
-                            hostname=host,
-                            port=port,
-                            auto_register=False)
+                            auto_register=False,
+                            **args)
     thread = threading.Thread(target=server.start)
     thread.daemon = True
     thread.start()
-                              
-def connect(host=DEFAULT_HOST, port=DEFAULT_PORT):
-    return rpyc_connect(host=host, port=port)

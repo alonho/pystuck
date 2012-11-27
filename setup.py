@@ -12,14 +12,14 @@ in addition, it opens an ipython prompt with an rpyc connection that provides
 access to the debuggee's modules (good for inspecting variables)."""
 
 setup(name='pystuck',
-      version='0.3',
+      version='0.4',
       classifiers = ["Development Status :: 4 - Beta",
                      "Intended Audience :: Developers",
                      "License :: OSI Approved :: BSD License",
                      "Programming Language :: Python :: 2.7"],
       description=README,
       author='Alon Horev',
-      author_email='alon@horev.net',
+      author_email='alonho@gmail.com',
       packages=['pystuck'],
       install_requires=['rpyc>=3', 'ipython'],
       license='BSD',

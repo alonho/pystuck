@@ -37,9 +37,9 @@ def stacks_repr_generator(threads=True, greenlets=True):
                                greenlet_frame_generator() if greenlets else ()):
         yield "{}\n{}".format(thread, pretty_format_stack(frame))
 
-def stacks_repr():
-    return '\n'.join(stacks_repr_generator())
+def stacks_repr(*a, **k):
+    return '\n'.join(stacks_repr_generator(*a, **k))
         
-def probe():
-    for stack in stacks_repr_generator():
+def probe(*a, **k):
+    for stack in stacks_repr_generator(*a, **k):
         print stack

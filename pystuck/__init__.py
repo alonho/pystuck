@@ -12,10 +12,10 @@ and prints the debugee's threads stack traces (good for most cases).
 in addition, it opens an ipython prompt with an rpyc connection that provides
 access to the debuggee's modules (good for inspecting variables)."""
 
-def run_client(host=DEFAULT_HOST, port=DEFAULT_PORT, print_stacks=True, ipython=True):
+def run_client(host=DEFAULT_HOST, port=DEFAULT_PORT, stacks=True, ipython=True, greenlets=True):
     conn = connect(host=host, port=port)
-    if print_stacks:
-        print conn.modules['pystuck.thread_probe'].stacks_repr()
+    if stacks:
+        print conn.modules['pystuck.thread_probe'].stacks_repr(greenlets=greenlets)
     if ipython:
         from pystuck.ipython import ishell
         modules = conn.modules
@@ -29,11 +29,12 @@ def main():
     parser.add_argument('host', nargs='?', default=DEFAULT_HOST, help='server address (default: {})'.format(DEFAULT_HOST))
     parser.add_argument('port', nargs='?', default=DEFAULT_PORT, help='server port (default: {})'.format(DEFAULT_PORT))
     parser.add_argument('--no-stacks', action='store_false', dest='stacks', help="don't print the debugee's threads and stacks")
+    parser.add_argument('--exclude-greenlets', action='store_false', dest='greenlets', help="don't print the debugee's greenlets stacks")
     parser.add_argument('--no-ipython', action='store_false', dest='ipython', help="don't open an ipython prompt for debugging")
     args = parser.parse_args()
 
     try:
-        run_client(host=args.host, port=args.port, print_stacks=args.stacks, ipython=args.ipython)
+        run_client(**vars(args))
     except socket.error:
         print "unable to connect to the server, please follow the instructions:"
         print README

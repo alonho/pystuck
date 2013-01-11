@@ -28,7 +28,7 @@ def main():
 
     parser = argparse.ArgumentParser(description=README)
     parser.add_argument('--host', default=DEFAULT_HOST, help='server address (default: {})'.format(DEFAULT_HOST))
-    parser.add_argument('--port', default=DEFAULT_PORT, help='server port (default: {})'.format(DEFAULT_PORT))
+    parser.add_argument('--port', default=DEFAULT_PORT, type=int, help='server port (default: {})'.format(DEFAULT_PORT))
     parser.add_argument('--unix_socket', default=None, help='server unix domain socket')
     parser.add_argument('--no-stacks', action='store_false', dest='stacks', help="don't print the debugee's threads/greenlets")
     parser.add_argument('--exclude-greenlets', action='store_false', dest='greenlets', help="don't print the debugee's greenlets. pass it when the process hogs memory as printing greenlets requires traversal of all objects in the garbage collector")

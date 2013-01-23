@@ -35,7 +35,7 @@ def pretty_format_stack(frame):
 def stacks_repr_generator(threads=True, greenlets=True):
     for thread, frame in chain(thread_frame_generator() if threads else (),
                                greenlet_frame_generator() if greenlets else ()):
-        yield "{}\n{}".format(thread, pretty_format_stack(frame))
+        yield "{0}\n{1}".format(thread, pretty_format_stack(frame))
 
 def stacks_repr(*a, **k):
     return '\n'.join(stacks_repr_generator(*a, **k))

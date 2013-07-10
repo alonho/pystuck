@@ -20,6 +20,7 @@ else:
     def patch():
         global is_patched
         is_patched = True
+        greenlets.add(greenlet.getcurrent())
         greenlet.greenlet = PatchedGreenlet
 
     def restore():

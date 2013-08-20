@@ -15,6 +15,8 @@ def thread_frame_generator():
             yield (thread_, frame)
 
 def pretty_format_stack(frame):
+    if frame is None:
+        return 'no frame found! greenlet probably ended.\n'
     return ''.join(format_stack(frame))
     
 def stacks_repr_generator(threads=True, greenlets=True):

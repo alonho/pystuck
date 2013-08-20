@@ -1,5 +1,3 @@
-from rpyc.utils.server import ThreadedServer
-from rpyc.core import SlaveService
 import greenlets
 import threading
 import os
@@ -17,6 +15,12 @@ def run_server(host=DEFAULT_HOST, port=DEFAULT_PORT, unix_socket=None, patch_gre
             os.unlink(unix_socket)
         except OSError:
             pass
+
+    # lazy imports make pystuck cooperative with gevent.
+    # users can import pystuck and gevent in any order.
+    # users should patch before calling run_server in order for rpyc to be patched.
+    from rpyc.utils.server import ThreadedServer
+    from rpyc.core import SlaveService
     server = ThreadedServer(service=SlaveService,
                             auto_register=False,
                             **args)

@@ -1,5 +1,4 @@
 import socket
-from rpyc.utils.classic import connect, unix_connect
 from pystuck.rpyc_tools import run_server, DEFAULT_HOST, DEFAULT_PORT
 
 README = """
@@ -14,6 +13,7 @@ in addition, it opens an ipython prompt with an rpyc connection that provides
 access to the debuggee's modules (good for inspecting variables)."""
 
 def run_client(host=DEFAULT_HOST, port=DEFAULT_PORT, unix_socket=None, stacks=True, ipython=True, greenlets=True):
+    from rpyc.utils.classic import connect, unix_connect
     conn = connect(host=host, port=port) if unix_socket is None else unix_connect(unix_socket)
     if stacks:
         print conn.modules['pystuck.thread_probe'].stacks_repr(greenlets=greenlets)

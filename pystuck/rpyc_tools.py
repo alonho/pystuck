@@ -5,7 +5,7 @@ import os
 DEFAULT_PORT = 6666
 DEFAULT_HOST = "127.0.0.1"
 
-def run_server(host=DEFAULT_HOST, port=DEFAULT_PORT, unix_socket=None, patch_greenlet=True):
+def run_server(host=DEFAULT_HOST, port=DEFAULT_PORT, unix_socket=None, patch_greenlet=True, **server_args):
     if patch_greenlet and greenlets.greenlet_available:
         greenlets.patch()
 
@@ -15,6 +15,8 @@ def run_server(host=DEFAULT_HOST, port=DEFAULT_PORT, unix_socket=None, patch_gre
             os.unlink(unix_socket)
         except OSError:
             pass
+
+    args.update(server_args)
 
     # lazy imports make pystuck cooperative with gevent.
     # users can import pystuck and gevent in any order.

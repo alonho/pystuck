@@ -1,4 +1,4 @@
-import greenlets
+from . import greenlets
 import threading
 import os
 

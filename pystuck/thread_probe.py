@@ -2,7 +2,7 @@ from itertools import chain
 from threading import enumerate as enum_threads
 from traceback import format_stack
 from sys import _current_frames
-from greenlets import greenlet_frame_generator
+from .greenlets import greenlet_frame_generator
 
 def thread_frame_generator():
     frames = _current_frames()
@@ -18,7 +18,7 @@ def pretty_format_stack(frame):
     if frame is None:
         return 'no frame found! greenlet probably ended.\n'
     return ''.join(format_stack(frame))
-    
+
 def stacks_repr_generator(threads=True, greenlets=True):
     for thread, frame in chain(thread_frame_generator() if threads else (),
                                greenlet_frame_generator() if greenlets else ()):
@@ -26,7 +26,7 @@ def stacks_repr_generator(threads=True, greenlets=True):
 
 def stacks_repr(*a, **k):
     return '\n'.join(stacks_repr_generator(*a, **k))
-        
+
 def probe(*a, **k):
     for stack in stacks_repr_generator(*a, **k):
-        print stack
+        print (stack)

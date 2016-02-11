@@ -13,10 +13,16 @@ in the debugged script: import pystuck; pystuck.run_server()
 
 to invoke the client: invoke pystuck from the shell.
 
-production use
+
+Dependancies
+==============
+* IPython
+* rpyc(3.2.3, may work with others)
+
+Droduction Use
 ==============
 
-pystuck doesn't consume resources when no client is connected to it. 
+pystuck doesn't consume resources when no client is connected to it.
 
 all the run_server function does is spawn a thread that blocks on accept (waiting for clients to connect), so it can be used in production.
 
@@ -27,7 +33,7 @@ there are two drawbacks for using pystuck in production:
 2. a potential security breach - nothing prevents an unprivilidged user connect to a privlidged running python process and use the remote access to do practically anything.
 
 =======
-install
+Install
 =======
 
 ::
@@ -38,7 +44,7 @@ install
 Examples
 ========
 
-what is python doing?!
+What is python doing?!
 ======================
 
 test.py is stuck, wouldn't you just die to know where?
@@ -50,11 +56,11 @@ test.py is stuck, wouldn't you just die to know where?
     while True:
         with lock: # could block
              sock.recv(1024) # could block
-  
+
 running pystuck from the shell shows interesting stuff:
 
 ::
-    
+
     % pystuck
     <_MainThread(MainThread, started -1215396160)>
       File "test.py", line 9, in <module>
@@ -65,28 +71,28 @@ running pystuck from the shell shows interesting stuff:
 it's stuck waiting for the lock!.
 it actually prints two more threads that are related to pystuck, ignore them.
 
-who's got the lock?!
+Who's got the lock?!
 ====================
 
 ::
 
     # it seldom happens that a thread doesn't release the lock or is stuck while holding it.
     # we want to know which thread... bear with me now.
-    rlock.acquire() 
+    rlock.acquire()
 
 invoking pystuck again:
 
 ::
-  
+
     % pystuck
     <_MainThread(MainThread, started -1215396160)>
       File "test.py", line 9, in <module>
         with lock: # could block
-    
+
     <Thread(Thread-1, started -1219450000)>
       File "test.py", line 12, in <module>
         do_math()
-  
+
     <Thread(Thread-2, started -1219540000)>
       File "test.py", line 14, in <module>
         foo()
@@ -96,41 +102,41 @@ invoking pystuck again:
     use the 'modules' dictionary to access remote modules (like 'os', or '__main__')
 
     In [0]: modules['sys']._current_frames() # gets a mapping between a thread to its frame (top of stack)
-    Out[0]: {-1215396160: <frame object at 0x8a07154>, 
+    Out[0]: {-1215396160: <frame object at 0x8a07154>,
              -1219450000: <frame object at 0x8a29154>,
              -1219540000: <frame object at 0x8b39154>}
-             
+
     In [1]: _[-1215396160] # get the stuck thread's frame
-    Out[1]: <frame object at 0x8a07154> 
-    
+    Out[1]: <frame object at 0x8a07154>
+
     In [2]: _.f_locals # local variables of the function
     Out[2]: {'lock': <_RLock owner=-1219450000 count=1>}
 
     In [3]: # our stuck thread is probably waiting for thread 1219450000 to finish do_math.. figures
 
-what rpyc can do for you
+What rpyc can do for you
 ========================
 
 rpyc is the library used to communicate python objects and procedure calls across processes.
 here are some of the things you can do to the already running server.
 
 ::
-    
+
     % pystuck
-    
+
     (stacks appear here...)
- 
+
     In [1]: modules['sys'].stdout = file("/tmp/log.txt", "w") # tunnel the script's stdout to log
-    
+
     In [2]: modules['__main__'].global_var = 100 # change and inspect variables in the __main__ module (the name of the script when invoked like this: python script.py)
 
     In [3]: socket = modules['socket'].socket() # create a socket object opened by the server script!
- 
+
 =====
-usage
+Usage
 =====
 
-:: 
+::
 
    usage: pystuck [-h] [--no-stacks] [--no-ipython] [host] [port]
 

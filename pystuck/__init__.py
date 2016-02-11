@@ -1,6 +1,5 @@
 import socket
 from pystuck.rpyc_tools import run_server, DEFAULT_HOST, DEFAULT_PORT
-
 README = """
 pystuck.py is a utility for analyzing stuck python programs (or just hardcore debugging).
 
@@ -16,11 +15,11 @@ def run_client(host=DEFAULT_HOST, port=DEFAULT_PORT, unix_socket=None, stacks=Tr
     from rpyc.utils.classic import connect, unix_connect
     conn = connect(host=host, port=port) if unix_socket is None else unix_connect(unix_socket)
     if stacks:
-        print conn.modules['pystuck.thread_probe'].stacks_repr(greenlets=greenlets)
+        print (conn.modules['pystuck.thread_probe'].stacks_repr(greenlets=greenlets))
     if ipython:
         from pystuck.ipython import ishell
         modules = conn.modules
-        print "use the 'modules' dictionary to access remote modules (like 'os', or '__main__')"
+        print ("use the 'modules' dictionary to access remote modules (like 'os', or '__main__')")
         ishell()
 
 def main():
@@ -38,8 +37,8 @@ def main():
     try:
         run_client(**vars(args))
     except socket.error:
-        print "unable to connect to the server, please follow the instructions:"
-        print README
+        print ("unable to connect to the server, please follow the instructions:")
+        print (README)
 
 if __name__ == '__main__':
     main()

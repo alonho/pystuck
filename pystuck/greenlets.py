@@ -5,7 +5,7 @@ except ImportError:
 else:
     greenlet_available = True
     is_patched = False
-    
+
     from weakref import WeakSet
 
     orig_greenlet = greenlet.greenlet
@@ -15,7 +15,7 @@ else:
     class PatchedGreenlet(orig_greenlet):
         def __init__(self, *a, **k):
             super(PatchedGreenlet, self).__init__(*a, **k)
-            greenlets.add(self)        
+            greenlets.add(self)
 
     def patch():
         global is_patched
@@ -33,7 +33,7 @@ else:
 # thanks Tarek!
 def greenlets_from_memory():
     import gc
-    
+
     try:
         from greenlet import greenlet
     except ImportError:

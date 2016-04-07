@@ -21,7 +21,7 @@ setup(name='pystuck',
       author='Alon Horev',
       author_email='alonho@gmail.com',
       packages=['pystuck'],
-      install_requires=['rpyc == 3.2.3', 'ipython'],
+      install_requires=['rpyc', 'ipython'],
       license='BSD',
       url='https://github.com/alonho/pystuck',
       entry_points={'console_scripts': ['pystuck=pystuck:main']})

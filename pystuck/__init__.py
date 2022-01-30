@@ -14,10 +14,14 @@ import socket
 from pystuck.rpyc_tools import run_server, DEFAULT_HOST, DEFAULT_PORT
 
 
-def run_client(host=DEFAULT_HOST, port=DEFAULT_PORT, stacks=False, ipython=True,
-               greenlets=True):
-    from rpyc.utils.classic import connect
-    conn = connect(host=host, port=port)
+def run_client(host=DEFAULT_HOST, port=DEFAULT_PORT, unix_socket=None, stacks=False,
+               ipython=True, greenlets=True):
+    from rpyc.utils.classic import connect, unix_connect
+    if unix_socket is None:
+        conn = connect(host=host, port=port)
+    else:
+        conn = unix_connect(unix_socket)
+    
     if stacks:
         print(conn.modules['pystuck.thread_probe'].stacks_repr(
             greenlets=greenlets))
@@ -38,6 +42,10 @@ def main():
     parser.add_argument(
         '--port', default=DEFAULT_PORT, type=int,
         help='server port (default: {0})'.format(DEFAULT_PORT)
+    )
+    parser.add_argument(
+        '--unix-socket', dest='unix_socket', 
+        help="unix domain socket file"
     )
     parser.add_argument(
         '--stacks', action='store_true', dest='stacks',

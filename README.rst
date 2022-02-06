@@ -19,7 +19,7 @@ Dependancies
 * IPython
 * rpyc(3.2.3, may work with others)
 
-Droduction Use
+Production Use
 ==============
 
 pystuck doesn't consume resources when no client is connected to it.
